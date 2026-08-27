@@ -1,0 +1,19 @@
+<header class="site-header">
+  <a class="brand" href="/" aria-label="AAU Forum home"><img class="brand-logo" src="/images/AAU Logo.png" alt="AAU logo"><span><strong>AAU Forum</strong><small>Ask your questions</small></span></a>
+  <label class="search-wrap"><span class="sr-only">Search</span><input class="search" type="search" placeholder="Search"></label>
+  <div class="header-actions">
+    <% if (currentUser) { %>
+      <a class="profile-link" href="/profile/<%= currentUser._id %>"><img class="avatar avatar-small" src="<%= currentUser.profilePic || '/images/default.png' %>" alt="Your profile picture"><span><%= currentUser.username %></span></a>
+      <a class="icon-button" href="/settings" aria-label="Settings">⚙</a>
+    <% } else { %><a class="text-link" href="/login">Login</a><% } %>
+    <div class="notification-wrap">
+      <button class="icon-button notification-button" type="button" data-notifications aria-expanded="false" aria-label="Notifications"><img src="/images/Notification.png" alt=""><span class="notification-badge <%= notificationCount ? '' : 'hidden' %>" data-notification-count><%= notificationCount || '' %></span></button>
+      <div class="notification-dropdown hidden" data-notification-dropdown>
+        <div class="notification-heading"><strong>Notifications</strong><button type="button" class="button button-quiet" data-clear-notifications>Clear all</button></div>
+        <div data-notification-list><% if (!notifications.length) { %><p class="muted notification-empty">No notifications</p><% } else { notifications.forEach(notification => { %><a class="notification-item" href="<%= notification.link || '#' %>" data-notification-id="<%= notification.id %>"><span><%= notification.text %></span><small><%= formatDate(notification.createdAt) %></small></a><% }) } %></div>
+      </div>
+    </div>
+    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode"><span aria-hidden="true">◐</span></button>
+  </div>
+</header>
+<aside class="sidebar"><nav class="sidebar-nav" aria-label="Main navigation"><a class="nav-item <%= active === 'home' ? 'active' : '' %>" href="/">Home</a><a class="nav-item <%= active === 'posts' ? 'active' : '' %>" href="/MyPosts">My Posts</a><a class="nav-item <%= active === 'messages' ? 'active' : '' %>" href="/Messages">Messages</a><a class="nav-item <%= active === 'polls' ? 'active' : '' %>" href="/Polls">Polls</a><a class="nav-item <%= active === 'events' ? 'active' : '' %>" href="/Events">Events</a></nav></aside>

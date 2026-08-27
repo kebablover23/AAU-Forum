@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('partials/head', { title: 'AAU Forum - Settings' }) %>
+</head>
+<body class="app-page">
+    <%- include('partials/header', { active: '' }) %>
+    <main class="content narrow-content">
+        <section class="form-card">
+            <p class="eyebrow">Your profile</p>
+            <h1>Settings</h1>
+            
+            <div class="settings-identity">
+                <a href="/profile/<%= currentUser._id %>">
+                    <img class="avatar avatar-large" src="<%= currentUser.profilePic || '/images/default.png' %>" alt="Your profile picture">
+                </a>
+                <div>
+                    <strong><%= currentUser.username %></strong>
+                    <small>UserID: <%= currentUser.Userid %></small>
+                </div>
+            </div>
+
+            <% if (error) { %>
+                <p class="error-message"><%= error %></p>
+            <% } %>
+            <% if (success) { %>
+                <p class="success-message"><%= success %></p>
+            <% } %>
+
+            <form class="stack-form" method="POST" action="/settings/update" enctype="multipart/form-data">
+                <label>UserID
+                    <input class="locked-field" value="<%= currentUser.Userid %>" readonly disabled>
+                </label>
+                <small class="muted">UserID cannot be changed. You can change your displayed name below.</small>
+
+                <label>Name
+                    <input name="username" placeholder="Your name" value="<%= currentUser.username %>" required>
+                </label>
+
+                <label>Role
+                    <select name="semester" required>
+                        <%- include('partials/roles', { selected: currentUser.semester }) %>
+                    </select>
+                </label>
+
+                <label>Bio
+                    <textarea name="bio" maxlength="500" placeholder="Tell the community about yourself..."><%= currentUser.bio || '' %></textarea>
+                </label>
+
+                <!-- NY STRUKTUR HER -->
+                <div class="photo-upload-section">
+                    <label for="profilePic">Profile Picture</label>
+                    <input type="file" id="profilePic" name="profilePic" accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp">
+                    
+                    <div class="photo-options">
+                        <label class="checkbox-label" for="removeProfilePic">
+                            <input type="checkbox" id="removeProfilePic" name="removeProfilePic"> Remove photo
+                        </label>
+                    </div>
+                </div>
+                <!-- SLUT NY STRUKTUR -->
+
+                <button class="button" type="submit">Save Changes</button>
+            </form>
+
+            <form class="logout-form" action="/logout" method="GET">
+                <button class="button button-danger" type="submit">Log out</button>
+            </form>
+        </section>
+    </main>
+    <%- include('partials/footer') %>
+</body>
+</html>

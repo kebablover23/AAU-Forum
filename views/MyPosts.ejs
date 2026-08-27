@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="en"><head><%- include('partials/head', { title: 'AAU Forum - My Posts' }) %></head>
+<body class="app-page" data-user-id="<%= currentUser?._id || '' %>"><%- include('partials/header', { active: 'posts' }) %>
+<main class="content"><div class="page-header"><div><p class="eyebrow">Your activity</p><h1>My Posts</h1></div><a class="button" href="/createPost">Create Post</a></div><section class="feed">
+<% if (!posts || posts.length === 0) { %><div class="empty-state"><h2>No posts found</h2><p>Your published posts will appear here.</p></div><% } %>
+<% (posts || []).forEach(post => { %><article class="post-card"><div class="post-author"><a href="/profile/<%= post.userId?._id || '' %>"><img class="avatar" src="<%= post.userId?.profilePic || '/images/default.png' %>" alt=""></a><div><a href="/profile/<%= post.userId?._id || '' %>"><strong><%= post.userId?.username || 'Unknown user' %></strong></a><small><%= post.userId?.semester || '' %> · <%= formatDate(post.createdAt) %></small></div></div><a class="post-link" href="/post/<%= post._id %>"><h2><%= post.title %></h2><p><%= post.description %></p><div class="tags"><% (post.tags || []).forEach(tag => { %><span class="tag"><%= tag %></span><% }) %><span class="tag"><%= post.comments?.length || 0 %> comments</span></div></a><form class="card-action" action="/delete/<%= post._id %>" method="POST"><button class="button button-danger" type="submit">Delete</button></form></article><% }) %>
+</section></main><%- include('partials/footer') %></body></html>

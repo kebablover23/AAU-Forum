@@ -1,0 +1,21 @@
+<section class="comments-section" data-comments="<%= item._id %>">
+  <div class="section-heading"><h2>Comments</h2><span class="muted"><%= item.comments?.length || 0 %></span></div>
+  <div class="comment-list">
+    <% if (!item.comments || item.comments.length === 0) { %><p class="muted" data-empty-comments>No comments yet</p><% } %>
+    <% (item.comments || []).forEach(comment => { %>
+      <article class="comment-card" data-comment-id="<%= comment._id %>">
+        <a href="/profile/<%= comment.user?._id || '' %>"><img class="avatar" src="<%= comment.user?.profilePic || '/images/default.png' %>" alt="<%= comment.user?.username || 'User' %>"></a>
+        <div class="comment-body">
+          <div class="comment-meta"><a href="/profile/<%= comment.user?._id || '' %>"><strong><%= comment.user?.username || 'Unknown user' %></strong></a><small><%= formatDate(comment.createdAt) %></small></div>
+          <p><%= comment.text %></p>
+          <% if (currentUser && comment.user && comment.user._id.toString() === currentUser._id.toString()) { %>
+            <form class="inline-form" action="/deleteComment" method="POST"><input type="hidden" name="itemType" value="<%= type %>"><input type="hidden" name="itemId" value="<%= item._id %>"><input type="hidden" name="commentId" value="<%= comment._id %>"><input type="hidden" name="redirectTo" value="<%= redirectTo %>"><button class="button button-quiet" type="submit">Delete</button></form>
+          <% } %>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+  <% if (currentUser) { %>
+    <form class="comment-form" action="/addComment" method="POST"><input type="hidden" name="itemType" value="<%= type %>"><input type="hidden" name="itemId" value="<%= item._id %>"><input type="hidden" name="redirectTo" value="<%= redirectTo %>"><input name="text" type="text" placeholder="Write comment..." maxlength="1000" required><button class="button" type="submit">Comment</button></form>
+  <% } %>
+</section>
